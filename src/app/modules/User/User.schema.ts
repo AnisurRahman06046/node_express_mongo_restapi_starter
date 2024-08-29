@@ -89,6 +89,7 @@ const userSchema = new Schema<IUser & Document>(
           type: Date,
           default: Date.now,
         },
+        default: [], 
       },
     ],
   },
