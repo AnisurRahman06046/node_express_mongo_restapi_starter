@@ -5,11 +5,16 @@ import notFoundHandler from './app/middlewares/notFound';
 // import router from './app/routes';
 const app: Application = express();
 import routes from './app/routes';
-import { swaggerDocs } from './swagger';
+import swaggerDocs from '../src/swagger';
+import config from './app/config';
+import logger from './logger';
+
+
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-swaggerDocs(app);
+swaggerDocs(app, config.port);
+app.use(logger)
 app.use('/api/v1', routes);
 
 app.get('/', (req: Request, res: Response) => {

@@ -3,8 +3,8 @@ import { userControllers } from './Auth.controllers';
 
 const router = Router();
 /**
- * @swagger
- * /register:
+ * @openapi
+ * /auth/register:
  *   post:
  *     summary: Register a new user
  *     requestBody:
@@ -27,8 +27,8 @@ const router = Router();
 router.post('/register', userControllers.register);
 
 /**
- * @swagger
- * /login:
+ * @openapi
+ * /auth/login:
  *   post:
  *     summary: Login a user
  *     requestBody:
@@ -48,6 +48,7 @@ router.post('/register', userControllers.register);
  *       400:
  *         description: Invalid credentials
  */
+
 router.post('/login', userControllers.login);
 
 export const authRoutes = router;

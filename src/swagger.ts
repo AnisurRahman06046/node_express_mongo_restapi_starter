@@ -1,33 +1,49 @@
-import path from 'path';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { Application } from 'express';
-
-// Compute __dirname using CommonJS
-
-
-const swaggerDefinition = {
-  openapi: '3.0.0',
-  info: {
-    title: 'Your API Title',
-    version: '1.0.0',
-    description: 'A description of your API',
-  },
-  servers: [
-    {
-      url: 'http://localhost:3000/api/v1',
-      description: 'Local server',
+import { version } from '../package.json';
+import { Application, Express, Request, Response } from 'express';
+import path from 'path'
+const opitons: swaggerJSDoc.Options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Node-Express-Mongo-RestApi Docs',
+      version,
     },
+    components: {
+      securitySchema: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: [
+    path.resolve(__dirname, './src/app/modules/Auth/Auth.routes.ts'),
+    '../src/app/modules/User/User.schema.ts',
   ],
 };
 
-const options = {
-  swaggerDefinition,
-  apis: [path.join(__dirname, '../app/routes/*.ts')], // Adjust this path as needed
-};
+const swaggerSpec = swaggerJSDoc(opitons);
 
-const swaggerSpec = swaggerJSDoc(options);
+function swaggerDocs(app: Application, port: any) {
+  // swagger page
+  app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-export const swaggerDocs = (app: Application) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-};
+  // docs in json format
+  app.get('docs.json', (req: Request, res: Response) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
+
+  console.log(`Api documentation: http://localhost:${port}/docs/`);
+}
+
+export default swaggerDocs;
