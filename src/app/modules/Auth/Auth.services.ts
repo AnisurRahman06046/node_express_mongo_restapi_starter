@@ -1,5 +1,7 @@
+import { authToken } from '../../middlewares/Auth.middleware';
 import { IUser } from '../User/User.interfaces';
 import { User } from '../User/User.schema';
+import bcrypt from 'bcryptjs';
 
 const register = async (payload: Partial<IUser>) => {
   /**
@@ -21,6 +23,43 @@ const register = async (payload: Partial<IUser>) => {
   }
 };
 
+// login user
+type ILogin = {
+  userName?: string;
+  email?: string;
+  password: string;
+};
+const login = async (payload: ILogin) => {
+  // Step 1: Find user by email or username
+  const query: Partial<IUser> = {};
+  if (payload.email) {
+    query.email = payload.email;
+  }
+  if (payload.userName) {
+    query.userName = payload.userName;
+  }
+  const user = await User.findOne(query);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  // Step 2: Compare passwords
+  const isMatch = await bcrypt.compare(payload.password, user.password);
+  if (!isMatch) {
+    throw new Error('Invalid credentials');
+  }
+
+  // Step 3: generate token
+  const tokenPayload = {
+    userId: user._id,
+    role: user.role,
+  };
+
+  const token = authToken.generateToken(tokenPayload);
+  return { token };
+};
+
 export const userServices = {
   register,
+  login,
 };

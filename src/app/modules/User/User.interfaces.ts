@@ -36,7 +36,7 @@ export type IAddress = {
     userName: string;
     email: string;
     password: string;
-    roles: UserRole[];              
+    role: UserRole[];              
     presentAddress?: IAddress;
     permanentAddress?: IAddress;
     contactInfo?: IContactInfo;

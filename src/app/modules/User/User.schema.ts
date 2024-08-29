@@ -28,7 +28,7 @@ const userSchema = new Schema<IUser & Document>(
       type: String,
       required: [true, 'Password is missing'],
     },
-    roles: {
+    role: {
       type: [String],
       enum: Object.values(UserRole),
       default: [UserRole.USER],
