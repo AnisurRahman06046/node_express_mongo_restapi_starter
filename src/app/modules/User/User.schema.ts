@@ -1,6 +1,7 @@
 import { Schema, model, Document } from 'mongoose';
-import { IUser, UserStatus } from './User.interfaces';
+import { IUser } from './User.interfaces';
 import bcrypt from 'bcryptjs';
+import { UserRole, UserStatus } from './User.constants';
 // Define the Mongoose schema for IUser
 const userSchema = new Schema<IUser & Document>(
   {
@@ -26,6 +27,11 @@ const userSchema = new Schema<IUser & Document>(
     password: {
       type: String,
       required: [true, 'Password is missing'],
+    },
+    roles: {
+      type: [String],
+      enum: Object.values(UserRole),
+      default: [UserRole.USER],
     },
     presentAddress: {
       type: {

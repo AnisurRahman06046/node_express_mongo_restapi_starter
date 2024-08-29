@@ -1,3 +1,5 @@
+import { UserRole, UserStatus } from "./User.constants";
+
 // Type definition for address
 export type IAddress = {
     street: string;
@@ -25,13 +27,7 @@ export type IAddress = {
     loginAt: Date;        // Date and time of the login
   };
   
-  // Enum for user status
-  export enum UserStatus {
-    ACTIVE = 'active',
-    PENDING = 'pending',
-    INACTIVE = 'inactive',
-    DELETED = 'deleted'
-  }
+
   
   // Type definition for user schema
   export type IUser = {
@@ -39,7 +35,8 @@ export type IAddress = {
     lastName: string;
     userName: string;
     email: string;
-    password: string;              // Current hashed password
+    password: string;
+    roles: UserRole[];              
     presentAddress?: IAddress;
     permanentAddress?: IAddress;
     contactInfo?: IContactInfo;
