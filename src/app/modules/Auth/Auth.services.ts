@@ -13,16 +13,13 @@ const register = async (payload: Partial<IUser>) => {
    * check if any user is already exists
    */
 
-  try {
-    const user = await User.find({ email: payload.email });
-    if (user) throw new ApiError(httpStatus.BAD_REQUEST, 'User already exists');
-    const result = await User.create(payload);
-    return result;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
+  const existingUser = await User.findOne({ email: payload.email });
+  if (existingUser) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'User already exists');
   }
+
+  const result = await User.create(payload);
+  return result;
 };
 
 // login user
@@ -67,7 +64,7 @@ const login = async (payload: ILogin, ipAddress: string) => {
   return { token };
 };
 
-export const userServices = {
+export const authServices = {
   register,
   login,
 };

@@ -1,10 +1,10 @@
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
 import sendApiResponse from '../../utils/sendApiResponse';
-import { userServices } from './Auth.services';
+import { authServices } from './Auth.services';
 
 const register = catchAsync(async (req, res) => {
-  const result = await userServices.register(req.body);
+  const result = await authServices.register(req.body);
   sendApiResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
@@ -16,7 +16,7 @@ const register = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   const ipAddress =
     req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  const result = await userServices.login(req.body, ipAddress as string);
+  const result = await authServices.login(req.body, ipAddress as string);
   sendApiResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
