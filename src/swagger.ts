@@ -2,7 +2,7 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { version } from '../package.json';
 import { Application, Express, Request, Response } from 'express';
-import path from 'path'
+import config from './app/config';
 const opitons: swaggerJSDoc.Options = {
   definition: {
     openapi: '3.0.0',
@@ -10,6 +10,22 @@ const opitons: swaggerJSDoc.Options = {
       title: 'Node-Express-Mongo-RestApi Docs',
       version,
     },
+    servers:[
+      {
+        url: `http://localhost:${config.port}`,
+        description:'Local Server'
+      },
+      {
+        url: `http://localhost:${config.port}`,
+        description:'Local Server'
+      }
+    ],
+    tags: [
+      {
+        name: 'Authentication',
+        description: 'APIs related to user authentication',
+      },
+    ],
     components: {
       securitySchema: {
         bearerAuth: {
@@ -25,10 +41,7 @@ const opitons: swaggerJSDoc.Options = {
       },
     ],
   },
-  apis: [
-    path.resolve(__dirname, './src/app/modules/Auth/Auth.routes.ts'),
-    '../src/app/modules/User/User.schema.ts',
-  ],
+  apis: ['./src/app/modules/Auth/Auth.routes.ts'],
 };
 
 const swaggerSpec = swaggerJSDoc(opitons);
