@@ -54,7 +54,8 @@ const login = async (payload: ILogin, ipAddress: string) => {
     role: user.role,
   };
 
-  const token = authToken.generateToken(tokenPayload);
+  const token =await authToken.generateToken(tokenPayload);
+  // console.log(token)
   // Ensure loginHistory is defined and handle updating it
   user.loginHistory = user.loginHistory || [];
   user.loginHistory.push({ ipAddress, loginAt: new Date() });

@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express';
 import httpStatus from 'http-status';
 import { ApiError } from '../Errors/ApiError';
 // create token
-const generateToken = async (payload: Record<string, unknown>) => {
+const generateToken = async (payload: Record<string, unknown>):Promise<string> => {
   return jwt.sign(payload, config.jwt.secret as Secret, {
     expiresIn: config.jwt.expires_in,
   });
